@@ -95,7 +95,7 @@ done by callback function ngexit().
 All boolean signals (NG_BOOL) are of type _Bool, if ngspice is compiled. They
 are of type bool if sharedspice.h is used externally.
 */
-#include <stdbool.h>
+
 #ifndef NGSPICE_PACKAGE_VERSION
 #define NGSPICE_PACKAGE_VERSION "40"
 #endif

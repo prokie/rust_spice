@@ -14,6 +14,10 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .header("src/sharedspice.h")
+        // Load at runtime
+        .dynamic_library_name("ngspice")
+        // Define the shared module macro
+        .clang_arg("-D SHARED_MODULE")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
