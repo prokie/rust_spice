@@ -44,9 +44,19 @@ mod tests {
                 None,
                 std::ptr::null_mut(),
             );
-            let s = CString::new("echo hello").expect("CString::new failed");
+            let s = CString::new(
+                "source C:/Users/pontu/Documents/rust_spice/tests/circuits/voltage_divider.sp",
+            )
+            .expect("CString::new failed");
             ng.ngSpice_Command(s.into_raw());
-            assert_eq!(responses.last().unwrap_or(&String::new()), "stdout hello");
+            let s = CString::new("op").expect("CString::new failed");
+            ng.ngSpice_Command(s.into_raw());
+            let s = CString::new("print out").expect("CString::new failed");
+            ng.ngSpice_Command(s.into_raw());
+            assert_eq!(
+                responses.last().unwrap_or(&String::new()),
+                "stdout out = 6.666667e-01"
+            );
         }
     }
 }
