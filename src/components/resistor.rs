@@ -1,3 +1,5 @@
+/// Bla bla bla
+///
 use nom::{
     character::complete::{char, digit1, space1},
     combinator::map_res,
@@ -5,17 +7,15 @@ use nom::{
     IResult,
 };
 
-use crate::circuit::NodeId;
-
 /// The Resistor Component.
 #[derive(Debug, PartialEq)]
 pub struct Resistor {
     /// The identification of the Resistor.
     pub identification: String,
     /// The first terminal.
-    pub node_1: NodeId,
+    pub node_1: String,
     /// The second terminal.
-    pub node_2: NodeId,
+    pub node_2: String,
     /// The resistance in ohms.
     pub value: f64,
 }
@@ -23,7 +23,7 @@ pub struct Resistor {
 pub fn parse_resistor(input: &str) -> IResult<&str, Resistor> {
     let (input, _) = char('R')(input)?;
 
-    // Parse a sequence of digits (the resistor name) and convert it to a String.
+    // Parse a sequence of digits (the resistor identification) and convert it to a String.
     let (input, identification) = map_res(digit1, |s: &str| {
         Ok::<String, nom::error::Error<&str>>(s.to_string())
     })(input)?;
@@ -35,8 +35,8 @@ pub fn parse_resistor(input: &str) -> IResult<&str, Resistor> {
     // and store them as a tuple.
     let (input, (node_1, node_2)) = separated_pair(digit1, space1, digit1)(input)?;
 
-    let node_1 = node_1.parse::<usize>().unwrap() as NodeId;
-    let node_2 = node_2.parse::<usize>().unwrap() as NodeId;
+    let node_1 = node_1.to_string();
+    let node_2 = node_2.to_string();
 
     // Match and consume one or more whitespace characters.
     let (input, _) = space1(input)?;

@@ -1,7 +1,4 @@
-use rust_spice::{
-    circuit::NodeId,
-    components::resistor::{parse_resistor, Resistor},
-};
+use rust_spice::components::resistor::{parse_resistor, Resistor};
 
 #[test]
 fn test_resistor() {
@@ -11,8 +8,8 @@ fn test_resistor() {
         Ok((
             "",
             Resistor {
-                node_1: 1 as NodeId,
-                node_2: 2 as NodeId,
+                node_1: "1".to_string(),
+                node_2: "2".to_string(),
                 value: 100.0,
                 identification: "1".to_string(),
             }
