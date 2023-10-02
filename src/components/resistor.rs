@@ -1,13 +1,14 @@
-/// Bla bla bla
-///
 use nom::{
-    character::complete::{char, digit1, space1},
+    character::complete::{alphanumeric1, char, digit1, space1},
     combinator::map_res,
     sequence::separated_pair,
     IResult,
 };
 
 /// The Resistor Component.
+/// <div style="text-align: center;">
+///     <img src="C:/Users/pontu/Documents/rust_spice/assets/components/resistor.png" alt="Image Alt Text" style="width: 50%; height: auto;">
+/// </div>
 #[derive(Debug, PartialEq)]
 pub struct Resistor {
     /// The identification of the Resistor.
@@ -24,7 +25,7 @@ pub fn parse_resistor(input: &str) -> IResult<&str, Resistor> {
     let (input, _) = char('R')(input)?;
 
     // Parse a sequence of digits (the resistor identification) and convert it to a String.
-    let (input, identification) = map_res(digit1, |s: &str| {
+    let (input, identification) = map_res(alphanumeric1, |s: &str| {
         Ok::<String, nom::error::Error<&str>>(s.to_string())
     })(input)?;
 
