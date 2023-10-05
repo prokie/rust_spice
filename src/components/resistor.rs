@@ -1,10 +1,11 @@
 use nom::{
-    character::complete::{alphanumeric1, char, digit1, space1},
+    character::complete::{char, digit1, one_of, space1},
     combinator::map_res,
     sequence::separated_pair,
     IResult,
 };
 
+use crate::parser::parse_component_name;
 /// The Resistor Component.
 /// <div style="text-align: center;">
 ///     <img src="C:/Users/pontu/Documents/rust_spice/assets/components/resistor.png" alt="Image Alt Text" style="width: 50%; height: auto;">
@@ -25,9 +26,7 @@ pub fn parse_resistor(input: &str) -> IResult<&str, Resistor> {
     let (input, _) = char('R')(input)?;
 
     // Parse a sequence of digits (the resistor identification) and convert it to a String.
-    let (input, identification) = map_res(alphanumeric1, |s: &str| {
-        Ok::<String, nom::error::Error<&str>>(s.to_string())
-    })(input)?;
+    let (input, identification) = parse_component_name(input)?;
 
     // Match and consume one or more whitespace characters.
     let (input, _) = space1(input)?;
@@ -43,7 +42,12 @@ pub fn parse_resistor(input: &str) -> IResult<&str, Resistor> {
     let (input, _) = space1(input)?;
 
     // Parse a sequence of digits (the resistor value) and convert it to f64.
-    let (input, value) = map_res(digit1, |s: &str| s.parse::<f64>())(input)?;
+    let (input, mut value) = map_res(digit1, |s: &str| s.parse::<f64>())(input)?;
+
+    let (input, prefix) =
+        one_of::<&str, &str, nom::error::Error<&str>>("kM")(input).unwrap_or((input, ' '));
+
+    value *= match_prefix(prefix);
 
     let components = Resistor {
         node_1,
@@ -53,4 +57,14 @@ pub fn parse_resistor(input: &str) -> IResult<&str, Resistor> {
     };
 
     Ok((input, components))
+}
+
+pub fn match_prefix(prefix: char) -> f64 {
+    dbg!(prefix);
+    match prefix {
+        'k' => 1000.0,
+        'M' => 1_000_000.0,
+        ' ' => 1.0,
+        _ => todo!(),
+    }
 }
