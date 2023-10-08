@@ -156,14 +156,15 @@ pub fn parse_file(input: &str) -> Result<Spice, io::Error> {
     // Create a BufReader to efficiently read the file line by line
     let mut reader = io::BufReader::new(file).lines();
 
-    let mut title = String::new();
+    // let mut title = String::new();
     let mut inside_control = false;
 
-    match reader.next() {
-        Some(Ok(value)) => title = value,
-        Some(Err(_error)) => todo!(),
-        None => todo!(),
-    }
+    let title = match reader.next() {
+        Some(Ok(value)) => value,
+        Some(Err(_error)) => return Err(io::Error::new(io::ErrorKind::Other, "Read error")),
+        None => return Err(io::Error::new(io::ErrorKind::Other, "Empty file")),
+    };
+
     // Iterate over lines in the file
     for line in reader {
         let line = line.unwrap();
