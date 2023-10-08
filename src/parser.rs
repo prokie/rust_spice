@@ -156,7 +156,6 @@ pub fn parse_file(input: &str) -> Result<Spice, io::Error> {
     // Create a BufReader to efficiently read the file line by line
     let mut reader = io::BufReader::new(file).lines();
 
-    // let mut title = String::new();
     let mut inside_control = false;
 
     let title = match reader.next() {
