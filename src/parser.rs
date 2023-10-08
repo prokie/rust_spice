@@ -8,12 +8,14 @@ use crate::components::capacitor::Capacitor;
 use crate::components::resistor::Resistor;
 pub struct SpiceParser {}
 
+/// Parse a component name, which is a sequence of alphanumeric characters.
 pub fn parse_component_name(input: &str) -> IResult<&str, String> {
     map_res(alphanumeric1, |s: &str| {
         Ok::<String, nom::error::Error<&str>>(s.to_string())
     })(input)
 }
 
+/// Parse a capacitor.
 pub fn parse_capacitor(input: &str) -> IResult<&str, Capacitor> {
     let (input, _) = char('C')(input)?;
 
