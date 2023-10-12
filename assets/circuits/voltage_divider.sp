@@ -6,3 +6,4 @@ R2 out 0 2k
   op
   print all
 .endc
+.end
